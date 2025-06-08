@@ -91,7 +91,7 @@ mkdir -p ~/catkin_ws/src
 cd ~/catkin_ws/src/
 
 # clone mir_robot into the catkin workspace
-git clone -b noetic https://github.com/DFKI-NI/mir_robot.git
+git clone -b noetic https://github.com/eugene900805/mir_robot.git
 
 # use rosdep to install all dependencies (including ROS itself)
 sudo apt-get update -qq
