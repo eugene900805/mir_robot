@@ -19,6 +19,10 @@
       <remap from="$(arg namespace)/mobile_base_controller/cmd_vel" to="$(arg namespace)/cmd_vel" />
       <remap from="$(arg namespace)/mobile_base_controller/odom"    to="$(arg namespace)/odom" />
 
+      <remap from="mir2/joint_states"                   to="mir2/mir/joint_states" />
+      <remap from="mir2/mobile_base_controller/cmd_vel" to="mir2/cmd_vel" />
+      <remap from="mir2/mobile_base_controller/odom"    to="mir2/odom" />
+
       <include file="$(find gazebo_ros)/launch/empty_world.launch">
         <arg name="world_name" value="$(arg world_name)"/>
         <arg name="paused" value="true" />

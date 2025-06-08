@@ -13,6 +13,10 @@
 
   <arg name="model_name" default="mir" doc="Name of the Gazebo robot model (needs to be different for each robot)" />
 
+  <!-- Parameters we share with ur_robot_driver -->
+  <!-- <arg name="controller_config_file" default="$(find ur_gazebo)/config/ur5_controllers.yaml"/> -->
+  <arg name="controllers" default="joint_state_controller pos_joint_traj_controller"/>
+  <!-- <arg name="stopped_controllers" default="joint_group_eff_controller"/> -->
 
   <!-- Load URDF -->
   <include file="$(find mir_description)/launch/upload_mir_urdf.launch">
@@ -21,16 +25,29 @@
   </include>
 
   <!-- Spawn the robot into Gazebo -->
+  <!-- <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model $(arg model_name)
+    -x $(arg robot_x) -y $(arg robot_y) -Y $(arg robot_yaw) "/> -->
+
   <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model $(arg model_name)
-    -x $(arg robot_x) -y $(arg robot_y) -Y $(arg robot_yaw) " />
+    -x $(arg robot_x) -y $(arg robot_y) -Y $(arg robot_yaw) 
+    -J $(arg prefix)ur5_shoulder_pan_joint -1.57 
+    -J $(arg prefix)ur5_shoulder_lift_joint -1.4 
+    -J $(arg prefix)ur5_elbow_joint 1.48 
+    -J $(arg prefix)ur5_wrist_1_joint -1.64 
+    -J $(arg prefix)ur5_wrist_2_joint 4.64" />
 
   <!-- Load ros_control controller configurations -->
   <rosparam file="$(find mir_description)/config/joint_state_controller.yaml" command="load" />
   <rosparam file="$(find mir_description)/config/diffdrive_controller.yaml" command="load" subst_value="true" />
 
+  <rosparam file="$(find ur_gazebo)/config/ur5_controllers.yaml" command="load" subst_value="true"/>
+  <rosparam file="$(find ur_gazebo)/config/gripper_controller.yaml" command="load" subst_value="true"/>
+
   <!-- Start the controllers -->
+  <!-- <node name="controller_spawner" pkg="controller_manager" type="spawner" output="screen"
+    args="joint_state_controller mobile_base_controller"/> -->
   <node name="controller_spawner" pkg="controller_manager" type="spawner" output="screen"
-    args="joint_state_controller mobile_base_controller"/>
+    args="joint_state_controller mobile_base_controller pos_joint_traj_controller gripper_controller"/>
 
   <!-- EKF -->
   <include file="$(find mir_gazebo)/launch/includes/ekf.launch.xml">

@@ -16,6 +16,7 @@
   </xacro:unless>
 
   <xacro:mir prefix="${prefix}" />
+  <!-- <xacro:mir prefix="mir2/" /> -->
   <xacro:controller_plugin_gazebo robot_namespace=""/>
 
   <!-- instead of the controller_plugin_gazebo, you can use the diffdrive controller like this:

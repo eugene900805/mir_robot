@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://ros.org/wiki/xacro">
+<robot name="mir_robot" xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:arg name="mir_type" default="mir_100" />      <!-- The MiR variant. Can be "mir_100" or "mir_250" for now.-->
   <xacro:property name="mir_type" value="$(arg mir_type)" />  <!-- necessary because args cannot be accessed inside ${} expressions -->
 
@@ -223,6 +223,48 @@
         <material>Gazebo/DarkGrey</material>
       </xacro:if>
     </gazebo>
+
+    <!-- Cabinet (櫃體) -->
+    <joint name="${prefix}cabinet_joint" type="fixed">
+      <parent link="${prefix}base_link"/>
+      <child link="${prefix}cabinet_link"/>
+      <!-- 可以根據需要調整櫃體的位置與高度 -->
+      <origin xyz="0.037 0.0 0.55" rpy="0 0 0"/>
+    </joint>
+
+    <link name="${prefix}cabinet_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <!-- 假設是立方體櫃體，尺寸為 0.4 x 0.3 x 0.5 公尺 -->
+          <box size="0.76 0.44 0.44"/>
+        </geometry>
+        <material name="CabinetColor">
+          <color rgba="0.2 0.2 0.2 1.0"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.75 0.44 0.4"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="10.0"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <inertia ixx="0.1" ixy="0" ixz="0" iyy="0.1" iyz="0" izz="0.1"/>
+      </inertial>
+    </link>
+
+    <!-- UR5 -->
+    <joint name="${prefix}cabinet_link_to_ur5_joint" type="fixed">
+      <parent link="${prefix}cabinet_link"/>
+      <child link="${prefix}ur5_base_link"/>
+      <origin xyz="0.30 0.14 0.22" rpy="0 0 0"/>
+    </joint>
+
+    <xacro:include filename="$(find ur_description)/urdf/ur5.xacro"/>
+    <xacro:ur5 ur5_prefix="${prefix}ur5_" />
 
     <!-- IMU -->
     <joint name="${prefix}base_link_to_imu_joint" type="fixed">
