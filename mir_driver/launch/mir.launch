@@ -82,4 +82,6 @@
   </node>
 
   <node name="fake_mir_joint_publisher" pkg="mir_driver" type="fake_mir_joint_publisher.py" output="screen" />
+
+  <node name="send_gripper_goal" pkg="mir_driver" type="send_gripper_goal.py" output="screen" />
 </launch>

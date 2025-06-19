@@ -31,6 +31,12 @@
 
 import rospy
 from sensor_msgs.msg import JointState
+import socket
+import time
+
+# Socket setings
+HOST = "192.168.0.102" # replace by the IP address of the UR robot
+PORT = 63352 # PORT used by robotiq gripper
 
 
 def fake_mir_joint_publisher():
@@ -52,8 +58,21 @@ def fake_mir_joint_publisher():
             prefix + 'bl_caster_wheel_joint',
             prefix + 'br_caster_rotation_joint',
             prefix + 'br_caster_wheel_joint',
+            prefix + 'ur5_robotiq_85_left_knuckle_joint',
         ]
         js.position = [0.0 for _ in js.name]
+        try:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.connect((HOST, PORT))
+                s.sendall(b'GET POS\n')
+                data = s.recv(2**10)
+                data = int(data.decode("utf-8")[4:])
+                js.position[-1] = (data-3) / 224 * 45 / 180 * 3.1415926
+                
+        except:
+            pass
+        # js.position[-1] = 40/180* 3.1415926
+
         js.velocity = [0.0 for _ in js.name]
         js.effort = [0.0 for _ in js.name]
         pub.publish(js)
