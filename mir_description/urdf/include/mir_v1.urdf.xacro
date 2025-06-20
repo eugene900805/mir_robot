@@ -229,7 +229,7 @@
       <parent link="${prefix}base_link"/>
       <child link="${prefix}cabinet_link"/>
       <!-- 可以根據需要調整櫃體的位置與高度 -->
-      <origin xyz="0.037 0.0 0.55" rpy="0 0 0"/>
+      <origin xyz="0.037 0.0 0.58" rpy="0 0 0"/>
     </joint>
 
     <link name="${prefix}cabinet_link">
@@ -246,7 +246,7 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <box size="0.75 0.44 0.4"/>
+          <box size="0.75 0.44 0.44"/>
         </geometry>
       </collision>
       <inertial>
